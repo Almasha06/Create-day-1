@@ -1,12 +1,57 @@
+<!-- <!DOCTYPE html> -->
+<!-- <html lang="en"> -->
+<!-- <head> -->
+    <!-- <meta charset="UTF-8"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <title>Document</title> -->
+<!-- </head> -->
+    <!-- <title>My web page</title> -->
+    <!-- <h1>Welcome to the game centre</h1> -->
+    <!-- <p>You can play various games here.</p> -->
+<!-- </body> -->
+<!-- </html> -->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My Game Page</title>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+        }
+
+        #gameBox {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            margin: 50px auto;
+            cursor: pointer;
+        }
+    </style>
 </head>
-    <title>My web page</title>
-    <h1>Welcome to the game centre</h1>
-    <p>You can play various games here.</p>
+
+<body>
+
+    <h1>Welcome to My Game Centre 🎮</h1>
+
+    <p>Score: <span id="score">0</span></p>
+
+    <div id="gameBox"></div>
+
+    <script>
+        let score = 0;
+
+        document.getElementById("gameBox").onclick = function () {
+            score++;
+            document.getElementById("score").textContent = score;
+        };
+    </script>
+
 </body>
+
 </html>

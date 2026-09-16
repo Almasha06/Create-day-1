@@ -11,7 +11,7 @@
 <!-- </body> -->
 <!-- </html> -->
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -50,6 +50,396 @@
             score++;
             document.getElementById("score").textContent = score;
         };
+    </script>
+
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Game Centre</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 30px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin: 25px;
+        }
+
+        .info-box {
+            background: #1f2937;
+            padding: 15px 25px;
+            border-radius: 12px;
+            min-width: 110px;
+        }
+
+        .info-box span {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        #gameArea {
+            width: 90%;
+            max-width: 800px;
+            height: 450px;
+            margin: auto;
+            background: #1e293b;
+            border: 3px solid #374151;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #target {
+            width: 65px;
+            height: 65px;
+            background: #ef4444;
+            border-radius: 50%;
+            position: absolute;
+            display: none;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
+        }
+
+        #target::after {
+            content: "🎯";
+            font-size: 35px;
+            position: absolute;
+            top: 13px;
+            left: 13px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Game title -->
+    <h1>🎮 Moving Target Game</h1>
+
+    <p>Click the target as many times as you can!</p>
+
+    <!-- Game information -->
+    <div class="game-info">
+
+        <div class="info-box">
+            Score
+            <span id="score">0</span>
+        </div>
+
+        <div class="info-box">
+            Time
+            <span id="time">30</span>
+        </div>
+
+        <div class="info-box">
+            Lives
+            <span id="lives">❤️❤️❤️</span>
+        </div>
+
+        <div class="info-box">
+            Level
+            <span id="level">1</span>
+        </div>
+
+        <div class="info-box">
+            High Score
+            <span id="highScore">0</span>
+        </div>
+
+    </div>
+
+    <!-- Game area -->
+    <div id="gameArea">
+
+        <!-- Target -->
+        <div id="target"></div>
+
+    </div>
+
+    <!-- Start button -->
+    <button id="startButton">Start Game 🎮</button>
+
+    <!-- Message -->
+    <div id="message"></div>
+
+
+    <script>
+
+        // Game variables
+        let score = 0;
+        let time = 30;
+        let lives = 3;
+        let level = 1;
+        let combo = 0;
+
+        let gameRunning = false;
+
+        let timer;
+        let moveTimer;
+
+
+        // Get HTML elements
+        const gameArea = document.getElementById("gameArea");
+        const target = document.getElementById("target");
+
+        const scoreText = document.getElementById("score");
+        const timeText = document.getElementById("time");
+        const livesText = document.getElementById("lives");
+        const levelText = document.getElementById("level");
+        const highScoreText = document.getElementById("highScore");
+
+        const startButton = document.getElementById("startButton");
+        const message = document.getElementById("message");
+
+
+        // Get saved high score
+        let highScore = localStorage.getItem("highScore") || 0;
+
+        highScoreText.textContent = highScore;
+
+
+        // Start game
+        startButton.addEventListener("click", startGame);
+
+
+        function startGame() {
+
+            // Reset game
+            score = 0;
+            time = 30;
+            lives = 3;
+            level = 1;
+            combo = 0;
+
+            gameRunning = true;
+
+            // Update screen
+            scoreText.textContent = score;
+            timeText.textContent = time;
+            livesText.textContent = "❤️❤️❤️";
+            levelText.textContent = level;
+
+            message.textContent = "Game Started! 🎯";
+
+            startButton.textContent = "Restart Game 🔄";
+
+            // Show target
+            target.style.display = "block";
+
+            moveTarget();
+
+            // Start timer
+            clearInterval(timer);
+
+            timer = setInterval(function () {
+
+                time--;
+
+                timeText.textContent = time;
+
+                if (time <= 0) {
+                    endGame();
+                }
+
+            }, 1000);
+
+
+            // Move target automatically
+            clearInterval(moveTimer);
+
+            moveTimer = setInterval(function () {
+
+                if (gameRunning) {
+                    moveTarget();
+                }
+
+            }, 1200);
+        }
+
+
+        // Move target to random position
+        function moveTarget() {
+
+            const maxX = gameArea.clientWidth - target.offsetWidth;
+            const maxY = gameArea.clientHeight - target.offsetHeight;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            target.style.left = randomX + "px";
+            target.style.top = randomY + "px";
+        }
+
+
+        // Target click
+        target.addEventListener("click", function () {
+
+            if (!gameRunning) {
+                return;
+            }
+
+            // Increase score
+            score++;
+
+            combo++;
+
+            // Combo bonus
+            if (combo % 5 === 0) {
+
+                score += 5;
+
+                message.textContent = "🔥 COMBO BONUS +5!";
+            }
+            else {
+
+                message.textContent = "Nice! 🎯";
+            }
+
+
+            // Update score
+            scoreText.textContent = score;
+
+
+            // Level system
+            if (score >= 10 && level === 1) {
+
+                level = 2;
+                levelText.textContent = level;
+
+                message.textContent = "🔥 Level 2!";
+            }
+
+
+            if (score >= 25 && level === 2) {
+
+                level = 3;
+                levelText.textContent = level;
+
+                message.textContent = "⚡ Level 3!";
+            }
+
+
+            if (score >= 45 && level === 3) {
+
+                level = 4;
+                levelText.textContent = level;
+
+                message.textContent = "🚀 Level 4!";
+            }
+
+
+            // Move immediately
+            moveTarget();
+        });
+
+
+        // Game area click
+        gameArea.addEventListener("click", function (event) {
+
+            if (!gameRunning) {
+                return;
+            }
+
+            // If player clicks outside target
+            if (event.target !== target) {
+
+                lives--;
+
+                combo = 0;
+
+                if (lives === 2) {
+                    livesText.textContent = "❤️❤️";
+                }
+
+                else if (lives === 1) {
+                    livesText.textContent = "❤️";
+                }
+
+                else if (lives === 0) {
+
+                    livesText.textContent = "💔";
+
+                    endGame();
+                }
+            }
+        });
+
+
+        // End game
+        function endGame() {
+
+            gameRunning = false;
+
+            clearInterval(timer);
+            clearInterval(moveTimer);
+
+            target.style.display = "none";
+
+            message.textContent =
+                "🏁 Game Over! Your Score: " + score;
+
+
+            // Save high score
+            if (score > highScore) {
+
+                highScore = score;
+
+                localStorage.setItem("highScore", highScore);
+
+                highScoreText.textContent = highScore;
+
+                message.textContent =
+                    "🏆 New High Score! " + score;
+            }
+        }
+
     </script>
 
 </body>

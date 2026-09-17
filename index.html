@@ -1,1385 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-    <title>My web page</title>
-    <h1>Welcome to the game centre</h1>
-    <p>You can play various games here.</p>
-</body>
-</html>
-
-<!DOCTYPE html> 
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Game Page</title>
-
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial;
-        }
-
-        #gameBox {
-            width: 100px;
-            height: 100px;
-            background-color: blue;
-            margin: 50px auto;
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-
-    <h1>Welcome to My Game Centre 🎮</h1>
-
-    <p>Score: <span id="score">0</span></p>
-
-    <div id="gameBox"></div>
-
-    <script>
-        let score = 0;
-
-        document.getElementById("gameBox").onclick = function () {
-            score++;
-            document.getElementById("score").textContent = score;
-        };
-    </script>
-
-</body>
-
-</html> -->
-
- <!DOCTYPE html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Game Centre</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #111827;
-            color: white;
-            text-align: center;
-        }
-
-        h1 {
-            margin-top: 30px;
-        }
-
-        .game-info {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            margin: 25px;
-        }
-
-        .info-box {
-            background: #1f2937;
-            padding: 15px 25px;
-            border-radius: 12px;
-            min-width: 110px;
-        }
-
-        .info-box span {
-            display: block;
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        #gameArea {
-            width: 90%;
-            max-width: 800px;
-            height: 450px;
-            margin: auto;
-            background: #1e293b;
-            border: 3px solid #374151;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #target {
-            width: 65px;
-            height: 65px;
-            background: #ef4444;
-            border-radius: 50%;
-            position: absolute;
-            display: none;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
-        }
-
-        #target::after {
-            content: "🎯";
-            font-size: 35px;
-            position: absolute;
-            top: 13px;
-            left: 13px;
-        }
-
-        button {
-            margin-top: 25px;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            background: #2563eb;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #1d4ed8;
-        }
-
-        #message {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-
-      <!-- Game title -->
-     <h1>🎮 Moving Target Game</h1>
-
-    <p>Click the target as many times as you can!</p>
-
-    <!-- Game information -->
-     <div class="game-info">
-
-        <div class="info-box">
-            Score
-            <span id="score">0</span>
-        </div>
-
-        <div class="info-box">
-            Time
-            <span id="time">30</span>
-        </div>
-
-        <div class="info-box">
-            Lives
-            <span id="lives">❤️❤️❤️</span>
-        </div>
-
-        <div class="info-box">
-            Level
-            <span id="level">1</span>
-        </div>
-
-        <div class="info-box">
-            High Score
-            <span id="highScore">0</span>
-        </div>
-
-    </div>
-
-    <!-- Game area -->
-    <div id="gameArea">
-
-        <!-- Target -->
-        <div id="target"></div>
-
-    </div>
-
-    <!-- Start button -->
-    <button id="startButton">Start Game 🎮</button>
-
-    <!-- Message -->
-    <div id="message"></div>
-
-
-    <script>
-
-        // Game variables
-        let score = 0;
-        let time = 30;
-        let lives = 3;
-        let level = 1;
-        let combo = 0;
-
-        let gameRunning = false;
-
-        let timer;
-        let moveTimer;
-
-
-        // Get HTML elements
-        const gameArea = document.getElementById("gameArea");
-        const target = document.getElementById("target");
-
-        const scoreText = document.getElementById("score");
-        const timeText = document.getElementById("time");
-        const livesText = document.getElementById("lives");
-        const levelText = document.getElementById("level");
-        const highScoreText = document.getElementById("highScore");
-
-        const startButton = document.getElementById("startButton");
-        const message = document.getElementById("message");
-
-
-        // Get saved high score
-        let highScore = localStorage.getItem("highScore") || 0;
-
-        highScoreText.textContent = highScore;
-
-
-        // Start game
-        startButton.addEventListener("click", startGame);
-
-
-        function startGame() {
-
-            // Reset game
-            score = 0;
-            time = 30;
-            lives = 3;
-            level = 1;
-            combo = 0;
-
-            gameRunning = true;
-
-            // Update screen
-            scoreText.textContent = score;
-            timeText.textContent = time;
-            livesText.textContent = "❤️❤️❤️";
-            levelText.textContent = level;
-
-            message.textContent = "Game Started! 🎯";
-
-            startButton.textContent = "Restart Game 🔄";
-
-            // Show target
-            target.style.display = "block";
-
-            moveTarget();
-
-            // Start timer
-            clearInterval(timer);
-
-            timer = setInterval(function () {
-
-                time--;
-
-                timeText.textContent = time;
-
-                if (time <= 0) {
-                    endGame();
-                }
-
-            }, 1000);
-
-
-            // Move target automatically
-            clearInterval(moveTimer);
-
-            moveTimer = setInterval(function () {
-
-                if (gameRunning) {
-                    moveTarget();
-                }
-
-            }, 1200);
-        }
- -->
-
-        // Move target to random position
-        function moveTarget() {
-
-            const maxX = gameArea.clientWidth - target.offsetWidth;
-            const maxY = gameArea.clientHeight - target.offsetHeight;
-
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
-
-            target.style.left = randomX + "px";
-            target.style.top = randomY + "px";
-        }
-
-
-        // Target click
-        target.addEventListener("click", function () {
-
-            if (!gameRunning) {
-                return;
-            }
-
-            // Increase score
-            score++;
-
-            combo++;
-
-            // Combo bonus
-            if (combo % 5 === 0) {
-
-                score += 5;
-
-                message.textContent = "🔥 COMBO BONUS +5!";
-            }
-            else {
-
-                message.textContent = "Nice! 🎯";
-            }
-
-
-            // Update score
-            scoreText.textContent = score;
-
-
-            // Level system
-            if (score >= 10 && level === 1) {
-
-                level = 2;
-                levelText.textContent = level;
-
-                message.textContent = "🔥 Level 2!";
-            }
-
-
-            if (score >= 25 && level === 2) {
-
-                level = 3;
-                levelText.textContent = level;
-
-                message.textContent = "⚡ Level 3!";
-            }
-
-
-            if (score >= 45 && level === 3) {
-
-                level = 4;
-                levelText.textContent = level;
-
-                message.textContent = "🚀 Level 4!";
-            }
-
-
-            // Move immediately
-            moveTarget();
-        });
-
-
-        // Game area click
-        gameArea.addEventListener("click", function (event) {
-
-            if (!gameRunning) {
-                return;
-            }
-
-            // If player clicks outside target
-            if (event.target !== target) {
-
-                lives--;
-
-                combo = 0;
-
-                if (lives === 2) {
-                    livesText.textContent = "❤️❤️";
-                }
-
-                else if (lives === 1) {
-                    livesText.textContent = "❤️";
-                }
-
-                else if (lives === 0) {
-
-                    livesText.textContent = "💔";
-
-                    endGame();
-                }
-            }
-        });
-
-
-        // End game
-        function endGame() {
-
-            gameRunning = false;
-
-            clearInterval(timer);
-            clearInterval(moveTimer);
-
-            target.style.display = "none";
-
-            message.textContent =
-                "🏁 Game Over! Your Score: " + score;
-
-
-            // Save high score
-            if (score > highScore) {
-
-                highScore = score;
-
-                localStorage.setItem("highScore", highScore);
-
-                highScoreText.textContent = highScore;
-
-                message.textContent =
-                    "🏆 New High Score! " + score;
-            }
-        }
-
-    </script>
-
-</body>
-
-</html> --> -->
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Color Match Game</title>
+    <title>Smart Student Learning Dashboard</title>
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #4f46e5, #8b5cf6, #ec4899);
-            overflow-x: hidden;
-        }
-
-        /* Main Layout */
-
-        .page {
-            min-height: 100vh;
-            padding: 30px;
-        }
-
-        .container {
-            max-width: 1250px;
-            min-height: 700px;
-            margin: auto;
-
-            display: grid;
-            grid-template-columns: 1.5fr 0.9fr;
-            gap: 25px;
-
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 30px;
-            padding: 25px;
-
-            backdrop-filter: blur(15px);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-        }
-
-        /* LEFT SIDE */
-
-        .left {
-            position: relative;
-            overflow: hidden;
-
-            border-radius: 25px;
-            padding: 35px;
-
-            background:
-                linear-gradient(
-                    160deg,
-                    #2563eb,
-                    #4f46e5 45%,
-                    #c084fc 100%
-                );
-
-            color: white;
-        }
-
-        /* Decorative circles */
-
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.2;
-        }
-
-        .bubble1 {
-            width: 180px;
-            height: 180px;
-            background: white;
-            top: -70px;
-            left: -50px;
-        }
-
-        .bubble2 {
-            width: 250px;
-            height: 250px;
-            background: #f9a8d4;
-            bottom: -120px;
-            left: 20%;
-        }
-
-        .bubble3 {
-            width: 130px;
-            height: 130px;
-            background: #67e8f9;
-            right: 30px;
-            top: 100px;
+            background: #f4f7fb;
+            color: #222;
         }
 
         /* Header */
-
-        .brand {
-            position: relative;
-            z-index: 2;
-
+        header {
+            background: #1d4ed8;
+            color: white;
+            padding: 20px 8%;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
         }
 
-        .brand-icon {
-            font-size: 38px;
+        header h1 {
+            font-size: 24px;
         }
 
-        .brand h2 {
-            font-size: 27px;
+        #themeBtn {
+            background: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
         }
 
-        .brand h2 span {
-            color: #f9a8d4;
+        /* Main */
+        main {
+            width: 85%;
+            margin: 30px auto;
         }
-
-        .brand p {
-            font-size: 14px;
-            margin-top: 3px;
-            opacity: 0.9;
-        }
-
-        /* Welcome */
 
         .welcome {
-            position: relative;
-            z-index: 2;
-
-            margin-top: 100px;
-            text-align: center;
-        }
-
-        .welcome small {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .welcome h1 {
-            font-size: clamp(45px, 5vw, 70px);
-            line-height: 1;
-            margin: 15px 0;
-
-            text-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .welcome h1 span {
-            color: #fde68a;
-        }
-
-        .welcome p {
-            font-size: 18px;
-            margin-top: 20px;
-        }
-
-        /* Game Character */
-
-        .controller {
-            position: relative;
-            z-index: 2;
-
-            margin: 70px auto 0;
-
-            width: 150px;
-            height: 100px;
-
             background: white;
-            border-radius: 45px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 65px;
-
-            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-
-            animation: float 2s infinite alternate;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px #ddd;
         }
 
-        @keyframes float {
-            from {
-                transform: translateY(0);
-            }
-
-            to {
-                transform: translateY(-12px);
-            }
+        .welcome h2 {
+            margin-bottom: 10px;
         }
 
-        /* RIGHT GAME PANEL */
-
-        .game-panel {
-            background: #ffffff;
-            border-radius: 25px;
-            padding: 28px;
-        }
-
-        .game-title {
-            text-align: center;
-
-            padding: 20px;
-
-            border-radius: 20px;
-
-            background: linear-gradient(
-                135deg,
-                #6d28d9,
-                #9333ea,
-                #ec4899
-            );
-
-            color: white;
-
-            box-shadow:
-                0 12px 25px rgba(124,58,237,0.25);
-        }
-
-        .game-title p {
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-
-        .game-title h2 {
-            font-size: 32px;
-        }
-
-        /* Stats */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-
+        /* Progress */
+        .progress-box {
             margin-top: 20px;
         }
 
-        .stat {
-            padding: 15px;
-
-            border-radius: 18px;
-
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            border: 1px solid #e5e7eb;
-        }
-
-        .stat-icon {
-            width: 45px;
-            height: 45px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 14px;
-
-            font-size: 23px;
-        }
-
-        .score-icon {
-            background: #fef3c7;
-        }
-
-        .time-icon {
-            background: #dcfce7;
-        }
-
-        .level-icon {
-            background: #dbeafe;
-        }
-
-        .lives-icon {
-            background: #fce7f3;
-        }
-
-        .high-icon {
-            background: #ede9fe;
-        }
-
-        .stat-text small {
-            color: #6b7280;
-        }
-
-        .stat-text strong {
-            display: block;
-            font-size: 22px;
-            color: #111827;
-            margin-top: 2px;
-        }
-
-        /* Color Display */
-
-        .instruction {
-            text-align: center;
-            margin-top: 25px;
-            color: #374151;
-            font-weight: bold;
-        }
-
-        #colorBox {
-            width: 145px;
-            height: 145px;
-
-            margin: 15px auto;
-
-            border-radius: 25px;
-
-            background: #ff1744;
-
-            box-shadow:
-                0 15px 35px rgba(255,23,68,0.3);
-
-            transition: 0.3s;
-
-            animation: pulse 1.2s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from {
-                transform: scale(1);
-            }
-
-            to {
-                transform: scale(1.04);
-            }
-        }
-
-        /* Color Buttons */
-
-        .colors {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .color-btn {
-            height: 65px;
-
-            border: none;
-            border-radius: 16px;
-
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-
-            cursor: pointer;
-
-            transition: 0.2s;
-
-            box-shadow:
-                0 7px 15px rgba(0,0,0,0.12);
-        }
-
-        .color-btn:hover {
-            transform: translateY(-3px);
-        }
-
-        .red {
-            background: #ff1744;
-        }
-
-        .blue {
-            background: #2979ff;
-        }
-
-        .green {
-            background: #00c853;
-        }
-
-        .yellow {
-            background: #fbbf24;
-            color: #422006;
-        }
-
-        /* Message */
-
-        #message {
-            text-align: center;
-            min-height: 25px;
-
-            margin: 15px 0;
-
-            font-weight: bold;
-            color: #4f46e5;
-        }
-
-        /* Start Button */
-
-        .start-btn {
+        .progress-bar {
             width: 100%;
+            height: 15px;
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
 
-            height: 58px;
+        .progress {
+            width: 65%;
+            height: 100%;
+            background: #22c55e;
+        }
 
-            border: none;
-            border-radius: 18px;
+        /* Courses */
+        .courses {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #7c3aed,
-                    #ec4899
-                );
+        .course-card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #ddd;
+            transition: 0.3s;
+        }
 
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .learn-btn {
+            background: #1d4ed8;
             color: white;
-
-            font-size: 18px;
-            font-weight: bold;
-
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
             cursor: pointer;
-
-            box-shadow:
-                0 10px 25px rgba(124,58,237,0.3);
-
-            transition: 0.25s;
         }
 
-        .start-btn:hover {
-            transform: translateY(-3px);
+        .learn-btn:hover {
+            background: #163ca5;
         }
 
-        /* Mobile */
-
-        @media (max-width: 900px) {
-
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .welcome {
-                margin-top: 60px;
-            }
-
+        /* Quiz */
+        .quiz {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px #ddd;
         }
 
-        @media (max-width: 500px) {
-
-            .page {
-                padding: 12px;
-            }
-
-            .container {
-                padding: 12px;
-            }
-
-            .left {
-                padding: 25px;
-            }
-
-            .welcome h1 {
-                font-size: 42px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr 1fr;
-            }
-
+        .quiz h2 {
+            margin-bottom: 15px;
         }
 
+        .quiz button {
+            margin: 8px 5px 0 0;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        /* Dark Mode */
+        .dark {
+            background: #111827;
+            color: white;
+        }
+
+        .dark .welcome,
+        .dark .course-card,
+        .dark .quiz {
+            background: #1f2937;
+            color: white;
+        }
+
+        .dark .course-card p {
+            color: #ccc;
+        }
     </style>
 </head>
 
-
 <body>
 
-<div class="page">
+    <!-- Header -->
+    <header>
 
-    <div class="container">
+        <h1>🎓 SmartLearn</h1>
 
+        <button id="themeBtn" onclick="changeTheme()">
+            🌙 Dark Mode
+        </button>
 
-        <!-- LEFT SIDE -->
-
-        <section class="left">
-
-            <div class="bubble bubble1"></div>
-            <div class="bubble bubble2"></div>
-            <div class="bubble bubble3"></div>
+    </header>
 
 
-            <div class="brand">
+    <main>
 
-                <div class="brand-icon">🎮</div>
+        <!-- Welcome Section -->
+        <section class="welcome">
 
-                <div>
-                    <h2>
-                        Color <span>Match</span>
-                    </h2>
+            <h2>Welcome Back 👋</h2>
 
-                    <p>
-                        Think • Click • Score
-                    </p>
+            <p>Continue your learning journey and improve your skills every day.</p>
+
+            <div class="progress-box">
+
+                <strong>Overall Progress: 65%</strong>
+
+                <div class="progress-bar">
+                    <div class="progress"></div>
                 </div>
 
-            </div>
-
-
-            <div class="welcome">
-
-                <small>✨ Welcome to</small>
-
-                <h1>
-                    Color
-                    <span>Match</span>
-                    Game
-                </h1>
-
-                <p>
-                    Look at the color and
-                    choose the correct one!
-                </p>
-
-            </div>
-
-
-            <div class="controller">
-                🎮
             </div>
 
         </section>
 
 
+        <!-- Courses -->
+        <h2>📚 My Courses</h2>
 
-        <!-- RIGHT SIDE -->
+        <section class="courses">
 
-        <section class="game-panel">
+            <div class="course-card">
 
+                <div class="course-icon">☕</div>
 
-            <div class="game-title">
+                <h3>Java Programming</h3>
 
-                <p>🎨 Find the color</p>
+                <p>Learn Java basics, OOP, arrays and collections.</p>
 
-                <h2 id="question">
-                    READY?
-                </h2>
-
-            </div>
-
-
-            <!-- Stats -->
-
-            <div class="stats">
-
-
-                <div class="stat">
-
-                    <div class="stat-icon score-icon">
-                        🏆
-                    </div>
-
-                    <div class="stat-text">
-                        <small>Score</small>
-                        <strong id="score">0</strong>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-icon time-icon">
-                        ⏱️
-                    </div>
-
-                    <div class="stat-text">
-                        <small>Time</small>
-                        <strong id="time">30</strong>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-icon level-icon">
-                        ⭐
-                    </div>
-
-                    <div class="stat-text">
-                        <small>Level</small>
-                        <strong id="level">1</strong>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-icon lives-icon">
-                        ❤️
-                    </div>
-
-                    <div class="stat-text">
-                        <small>Lives</small>
-                        <strong id="lives">❤️❤️❤️</strong>
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-icon high-icon">
-                        👑
-                    </div>
-
-                    <div class="stat-text">
-                        <small>High Score</small>
-                        <strong id="highScore">0</strong>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <p class="instruction">
-                Choose the matching color 👇
-            </p>
-
-
-            <!-- Color -->
-
-            <div id="colorBox"></div>
-
-
-            <!-- Buttons -->
-
-            <div class="colors">
-
-                <button
-                    class="color-btn red"
-                    onclick="checkColor('red')">
-
-                    RED
-
-                </button>
-
-
-                <button
-                    class="color-btn blue"
-                    onclick="checkColor('blue')">
-
-                    BLUE
-
-                </button>
-
-
-                <button
-                    class="color-btn green"
-                    onclick="checkColor('green')">
-
-                    GREEN
-
-                </button>
-
-
-                <button
-                    class="color-btn yellow"
-                    onclick="checkColor('yellow')">
-
-                    YELLOW
-
+                <button class="learn-btn"
+                    onclick="startCourse('Java Programming')">
+                    Start Learning
                 </button>
 
             </div>
 
 
-            <div id="message">
-                Press Start Game 🚀
+            <div class="course-card">
+
+                <div class="course-icon">🐍</div>
+
+                <h3>Python</h3>
+
+                <p>Learn Python programming with simple projects.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('Python')">
+                    Start Learning
+                </button>
+
             </div>
 
 
-            <button
-                class="start-btn"
-                onclick="startGame()">
+            <div class="course-card">
 
-                ▶ Start Game
+                <div class="course-icon">🌐</div>
 
+                <h3>Web Development</h3>
+
+                <p>Learn HTML, CSS and JavaScript from basics.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('Web Development')">
+                    Start Learning
+                </button>
+
+            </div>
+
+
+            <div class="course-card">
+
+                <div class="course-icon">🗄️</div>
+
+                <h3>SQL & Database</h3>
+
+                <p>Learn queries, joins, functions and databases.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('SQL & Database')">
+                    Start Learning
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Quiz -->
+        <section class="quiz">
+
+            <h2>🧠 Quick Quiz</h2>
+
+            <p>Which language is mainly used for web page structure?</p>
+
+            <button onclick="checkAnswer('HTML')">
+                HTML
             </button>
 
+            <button onclick="checkAnswer('CSS')">
+                CSS
+            </button>
+
+            <button onclick="checkAnswer('Java')">
+                Java
+            </button>
+
+            <p id="result"></p>
 
         </section>
 
-    </div>
-
-</div>
+    </main>
 
 
+    <script>
 
-<script>
+        // Start Course
+        function startCourse(courseName) {
 
-    let score = 0;
-    let time = 30;
-    let level = 1;
-    let lives = 3;
-
-    let correctColor = "";
-
-    let gameRunning = false;
-
-    let timer;
-
-
-    const colors = {
-
-        red: "#ff1744",
-
-        blue: "#2979ff",
-
-        green: "#00c853",
-
-        yellow: "#fbbf24"
-
-    };
-
-
-    /* High Score */
-
-    let highScore =
-        localStorage.getItem("colorHighScore") || 0;
-
-    document.getElementById("highScore").innerText =
-        highScore;
-
-
-
-    /* Start Game */
-
-    function startGame() {
-
-        score = 0;
-        time = 30;
-        level = 1;
-        lives = 3;
-
-        gameRunning = true;
-
-        clearInterval(timer);
-
-        document.getElementById("message").innerText =
-            "🔥 Game started!";
-
-        document.querySelector(".start-btn").innerText =
-            "🔄 Restart Game";
-
-        updateScreen();
-
-        newRound();
-
-
-        timer = setInterval(function() {
-
-            time--;
-
-            updateScreen();
-
-
-            if (time <= 0) {
-
-                endGame();
-
-            }
-
-        }, 1000);
-
-    }
-
-
-
-    /* New Round */
-
-    function newRound() {
-
-        const colorNames =
-            Object.keys(colors);
-
-        const random =
-            Math.floor(
-                Math.random() *
-                colorNames.length
-            );
-
-        correctColor =
-            colorNames[random];
-
-
-        document.getElementById("question").innerText =
-            correctColor.toUpperCase();
-
-
-        document.getElementById("colorBox").style.background =
-            colors[correctColor];
-
-    }
-
-
-
-    /* Check Answer */
-
-    function checkColor(clickedColor) {
-
-        if (!gameRunning) {
-
-            return;
+            alert("You selected: " + courseName);
 
         }
 
 
-        if (clickedColor === correctColor) {
+        // Quiz
+        function checkAnswer(answer) {
 
-            score++;
+            let result = document.getElementById("result");
 
-            document.getElementById("message").innerText =
-                "✨ Correct! Great job!";
+            if (answer === "HTML") {
 
+                result.innerHTML = "✅ Correct! HTML is used for web page structure.";
+                result.style.color = "green";
 
-            /* Level */
+            } else {
 
-            if (score >= 5) {
-                level = 2;
-            }
+                result.innerHTML = "❌ Try again!";
 
-            if (score >= 10) {
-                level = 3;
-            }
-
-            if (score >= 15) {
-                level = 4;
-            }
-
-
-            newRound();
-
-        }
-
-        else {
-
-            lives--;
-
-            document.getElementById("message").innerText =
-                "❌ Wrong! Try again.";
-
-            if (lives <= 0) {
-
-                endGame();
-
-                return;
+                result.style.color = "red";
 
             }
 
         }
 
 
-        updateScreen();
+        // Dark Mode
+        function changeTheme() {
 
-    }
+            document.body.classList.toggle("dark");
 
+            let button = document.getElementById("themeBtn");
 
+            if (document.body.classList.contains("dark")) {
 
-    /* Update Screen */
+                button.innerHTML = "☀️ Light Mode";
 
-    function updateScreen() {
+            } else {
 
-        document.getElementById("score").innerText =
-            score;
+                button.innerHTML = "🌙 Dark Mode";
 
-        document.getElementById("time").innerText =
-            time;
-
-        document.getElementById("level").innerText =
-            level;
-
-
-        let hearts = "";
-
-        for (let i = 0; i < lives; i++) {
-
-            hearts += "❤️";
+            }
 
         }
 
-        document.getElementById("lives").innerText =
-            hearts;
-
-
-        document.getElementById("highScore").innerText =
-            highScore;
-
-    }
-
-
-
-    /* End Game */
-
-    function endGame() {
-
-        clearInterval(timer);
-
-        gameRunning = false;
-
-
-        if (score > highScore) {
-
-            highScore = score;
-
-            localStorage.setItem(
-                "colorHighScore",
-                highScore
-            );
-
-        }
-
-
-        updateScreen();
-
-
-        document.getElementById("question").innerText =
-            "GAME OVER";
-
-
-        document.getElementById("message").innerText =
-            "🏆 Your Score: " + score;
-
-    }
-
-</script>
+    </script>
 
 </body>
+
 </html>

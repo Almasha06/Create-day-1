@@ -453,10 +453,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Color Rush Game</title>
+    <title>Color Match Game</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -466,293 +465,391 @@
         body {
             font-family: Arial, sans-serif;
             min-height: 100vh;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            background:
-                radial-gradient(circle at top left, #d8b4fe, transparent 35%),
-                radial-gradient(circle at bottom right, #93c5fd, transparent 35%),
-                #f8fafc;
-
-            padding: 25px;
+            background: linear-gradient(135deg, #4f46e5, #8b5cf6, #ec4899);
+            overflow-x: hidden;
         }
 
-        /* Main Card */
+        /* Main Layout */
 
-        .game-card {
-            width: 100%;
-            max-width: 850px;
-
-            background: rgba(255, 255, 255, 0.85);
-
-            border: 1px solid white;
-
-            border-radius: 30px;
-
+        .page {
+            min-height: 100vh;
             padding: 30px;
+        }
 
-            box-shadow:
-                0 25px 60px rgba(79, 70, 229, 0.15);
+        .container {
+            max-width: 1250px;
+            min-height: 700px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: 1.5fr 0.9fr;
+            gap: 25px;
+
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
+            padding: 25px;
 
             backdrop-filter: blur(15px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        }
+
+        /* LEFT SIDE */
+
+        .left {
+            position: relative;
+            overflow: hidden;
+
+            border-radius: 25px;
+            padding: 35px;
+
+            background:
+                linear-gradient(
+                    160deg,
+                    #2563eb,
+                    #4f46e5 45%,
+                    #c084fc 100%
+                );
+
+            color: white;
+        }
+
+        /* Decorative circles */
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.2;
+        }
+
+        .bubble1 {
+            width: 180px;
+            height: 180px;
+            background: white;
+            top: -70px;
+            left: -50px;
+        }
+
+        .bubble2 {
+            width: 250px;
+            height: 250px;
+            background: #f9a8d4;
+            bottom: -120px;
+            left: 20%;
+        }
+
+        .bubble3 {
+            width: 130px;
+            height: 130px;
+            background: #67e8f9;
+            right: 30px;
+            top: 100px;
         }
 
         /* Header */
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            margin-bottom: 25px;
-        }
-
-        .title-area h1 {
-            font-size: 34px;
-            color: #111827;
-        }
-
-        .title-area p {
-            margin-top: 6px;
-            color: #6b7280;
-        }
-
-        .game-icon {
-            width: 55px;
-            height: 55px;
+        .brand {
+            position: relative;
+            z-index: 2;
 
             display: flex;
-            justify-content: center;
             align-items: center;
+            gap: 12px;
+        }
 
-            border-radius: 18px;
+        .brand-icon {
+            font-size: 38px;
+        }
 
+        .brand h2 {
             font-size: 27px;
+        }
+
+        .brand h2 span {
+            color: #f9a8d4;
+        }
+
+        .brand p {
+            font-size: 14px;
+            margin-top: 3px;
+            opacity: 0.9;
+        }
+
+        /* Welcome */
+
+        .welcome {
+            position: relative;
+            z-index: 2;
+
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .welcome small {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .welcome h1 {
+            font-size: clamp(45px, 5vw, 70px);
+            line-height: 1;
+            margin: 15px 0;
+
+            text-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .welcome h1 span {
+            color: #fde68a;
+        }
+
+        .welcome p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        /* Game Character */
+
+        .controller {
+            position: relative;
+            z-index: 2;
+
+            margin: 70px auto 0;
+
+            width: 150px;
+            height: 100px;
+
+            background: white;
+            border-radius: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 65px;
+
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+
+            animation: float 2s infinite alternate;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-12px);
+            }
+        }
+
+        /* RIGHT GAME PANEL */
+
+        .game-panel {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 28px;
+        }
+
+        .game-title {
+            text-align: center;
+
+            padding: 20px;
+
+            border-radius: 20px;
 
             background: linear-gradient(
                 135deg,
-                #7c3aed,
+                #6d28d9,
+                #9333ea,
                 #ec4899
             );
 
             color: white;
 
             box-shadow:
-                0 10px 25px rgba(124, 58, 237, 0.3);
+                0 12px 25px rgba(124,58,237,0.25);
+        }
+
+        .game-title p {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .game-title h2 {
+            font-size: 32px;
         }
 
         /* Stats */
 
         .stats {
             display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
 
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 15px;
-
-            margin-bottom: 25px;
+            margin-top: 20px;
         }
 
         .stat {
-            padding: 18px;
+            padding: 15px;
 
             border-radius: 18px;
 
-            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 12px;
 
             border: 1px solid #e5e7eb;
-
-            text-align: center;
         }
 
-        .stat small {
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            font-size: 23px;
+        }
+
+        .score-icon {
+            background: #fef3c7;
+        }
+
+        .time-icon {
+            background: #dcfce7;
+        }
+
+        .level-icon {
+            background: #dbeafe;
+        }
+
+        .lives-icon {
+            background: #fce7f3;
+        }
+
+        .high-icon {
+            background: #ede9fe;
+        }
+
+        .stat-text small {
             color: #6b7280;
-            font-size: 13px;
         }
 
-        .stat strong {
+        .stat-text strong {
             display: block;
-
-            margin-top: 5px;
-
-            font-size: 25px;
-
+            font-size: 22px;
             color: #111827;
+            margin-top: 2px;
         }
 
-        /* Game Area */
+        /* Color Display */
 
-        .game-area {
-            height: 390px;
+        .instruction {
+            text-align: center;
+            margin-top: 25px;
+            color: #374151;
+            font-weight: bold;
+        }
 
-            position: relative;
+        #colorBox {
+            width: 145px;
+            height: 145px;
 
-            overflow: hidden;
+            margin: 15px auto;
 
             border-radius: 25px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #eef2ff,
-                    #fdf2f8
-                );
-
-            border: 2px solid #e5e7eb;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Decorative circles */
-
-        .circle {
-            position: absolute;
-
-            border-radius: 50%;
-
-            opacity: 0.25;
-
-            filter: blur(2px);
-        }
-
-        .circle.one {
-            width: 130px;
-            height: 130px;
-
-            background: #a855f7;
-
-            top: -50px;
-            left: -30px;
-        }
-
-        .circle.two {
-            width: 160px;
-            height: 160px;
-
-            background: #38bdf8;
-
-            bottom: -70px;
-            right: -40px;
-        }
-
-        .circle.three {
-            width: 80px;
-            height: 80px;
-
-            background: #f43f5e;
-
-            top: 40px;
-            right: 100px;
-        }
-
-        /* Target */
-
-        #target {
-            position: absolute;
-
-            width: 85px;
-            height: 85px;
-
-            border-radius: 50%;
-
-            cursor: pointer;
-
-            display: none;
-
-            transition:
-                left 0.25s ease,
-                top 0.25s ease,
-                transform 0.2s ease;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #7c3aed,
-                    #ec4899
-                );
+            background: #ff1744;
 
             box-shadow:
-                0 0 0 8px rgba(255,255,255,0.5),
-                0 12px 30px rgba(124,58,237,0.35);
+                0 15px 35px rgba(255,23,68,0.3);
 
-            animation: floating 1.2s infinite alternate;
+            transition: 0.3s;
+
+            animation: pulse 1.2s infinite alternate;
         }
 
-        #target:hover {
-            transform: scale(1.12);
-        }
-
-        @keyframes floating {
-
+        @keyframes pulse {
             from {
                 transform: scale(1);
             }
 
             to {
-                transform: scale(1.07);
+                transform: scale(1.04);
             }
-
         }
 
-        /* Target inner */
+        /* Color Buttons */
 
-        #target::after {
-            content: "✦";
+        .colors {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
 
-            position: absolute;
+        .color-btn {
+            height: 65px;
 
-            inset: 0;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
+            border: none;
+            border-radius: 16px;
 
             color: white;
+            font-size: 16px;
+            font-weight: bold;
 
-            font-size: 35px;
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            box-shadow:
+                0 7px 15px rgba(0,0,0,0.12);
+        }
+
+        .color-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .red {
+            background: #ff1744;
+        }
+
+        .blue {
+            background: #2979ff;
+        }
+
+        .green {
+            background: #00c853;
+        }
+
+        .yellow {
+            background: #fbbf24;
+            color: #422006;
         }
 
         /* Message */
 
-        .message {
+        #message {
             text-align: center;
-
-            margin: 20px 0;
-
             min-height: 25px;
 
-            color: #374151;
+            margin: 15px 0;
 
             font-weight: bold;
+            color: #4f46e5;
         }
 
-        /* Button */
+        /* Start Button */
 
         .start-btn {
-            display: block;
+            width: 100%;
 
-            margin: auto;
+            height: 58px;
 
             border: none;
-
-            padding: 15px 35px;
-
-            border-radius: 15px;
-
-            color: white;
-
-            font-size: 16px;
-
-            font-weight: bold;
-
-            cursor: pointer;
+            border-radius: 18px;
 
             background:
                 linear-gradient(
@@ -761,45 +858,57 @@
                     #ec4899
                 );
 
+            color: white;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+
             box-shadow:
-                0 10px 25px rgba(124,58,237,0.25);
+                0 10px 25px rgba(124,58,237,0.3);
 
             transition: 0.25s;
         }
 
         .start-btn:hover {
             transform: translateY(-3px);
-
-            box-shadow:
-                0 15px 30px rgba(124,58,237,0.35);
         }
 
         /* Mobile */
 
-        @media (max-width: 600px) {
+        @media (max-width: 900px) {
 
-            .game-card {
-                padding: 20px;
+            .container {
+                grid-template-columns: 1fr;
             }
 
-            .title-area h1 {
-                font-size: 27px;
+            .welcome {
+                margin-top: 60px;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .page {
+                padding: 12px;
+            }
+
+            .container {
+                padding: 12px;
+            }
+
+            .left {
+                padding: 25px;
+            }
+
+            .welcome h1 {
+                font-size: 42px;
             }
 
             .stats {
-                gap: 8px;
-            }
-
-            .stat {
-                padding: 12px 5px;
-            }
-
-            .stat strong {
-                font-size: 20px;
-            }
-
-            .game-area {
-                height: 330px;
+                grid-template-columns: 1fr 1fr;
             }
 
         }
@@ -810,329 +919,467 @@
 
 <body>
 
-    <div class="game-card">
+<div class="page">
 
-        <!-- Header -->
-
-        <div class="header">
-
-            <div class="title-area">
-
-                <h1>🎨 Color Rush</h1>
-
-                <p>Test your speed and reflexes</p>
-
-            </div>
-
-            <div class="game-icon">
-                ⚡
-            </div>
-
-        </div>
+    <div class="container">
 
 
-        <!-- Stats -->
+        <!-- LEFT SIDE -->
 
-        <div class="stats">
+        <section class="left">
 
-            <div class="stat">
+            <div class="bubble bubble1"></div>
+            <div class="bubble bubble2"></div>
+            <div class="bubble bubble3"></div>
 
-                <small>SCORE</small>
 
-                <strong id="score">
-                    0
-                </strong>
+            <div class="brand">
+
+                <div class="brand-icon">🎮</div>
+
+                <div>
+                    <h2>
+                        Color <span>Match</span>
+                    </h2>
+
+                    <p>
+                        Think • Click • Score
+                    </p>
+                </div>
 
             </div>
 
 
-            <div class="stat">
+            <div class="welcome">
 
-                <small>TIME</small>
+                <small>✨ Welcome to</small>
 
-                <strong id="time">
-                    30
-                </strong>
+                <h1>
+                    Color
+                    <span>Match</span>
+                    Game
+                </h1>
+
+                <p>
+                    Look at the color and
+                    choose the correct one!
+                </p>
+
+            </div>
+
+
+            <div class="controller">
+                🎮
+            </div>
+
+        </section>
+
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="game-panel">
+
+
+            <div class="game-title">
+
+                <p>🎨 Find the color</p>
+
+                <h2 id="question">
+                    READY?
+                </h2>
 
             </div>
 
 
-            <div class="stat">
+            <!-- Stats -->
 
-                <small>LEVEL</small>
+            <div class="stats">
 
-                <strong id="level">
-                    1
-                </strong>
+
+                <div class="stat">
+
+                    <div class="stat-icon score-icon">
+                        🏆
+                    </div>
+
+                    <div class="stat-text">
+                        <small>Score</small>
+                        <strong id="score">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-icon time-icon">
+                        ⏱️
+                    </div>
+
+                    <div class="stat-text">
+                        <small>Time</small>
+                        <strong id="time">30</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-icon level-icon">
+                        ⭐
+                    </div>
+
+                    <div class="stat-text">
+                        <small>Level</small>
+                        <strong id="level">1</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-icon lives-icon">
+                        ❤️
+                    </div>
+
+                    <div class="stat-text">
+                        <small>Lives</small>
+                        <strong id="lives">❤️❤️❤️</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-icon high-icon">
+                        👑
+                    </div>
+
+                    <div class="stat-text">
+                        <small>High Score</small>
+                        <strong id="highScore">0</strong>
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
+
+            <p class="instruction">
+                Choose the matching color 👇
+            </p>
 
 
-        <!-- Game Area -->
+            <!-- Color -->
 
-        <div class="game-area" id="gameArea">
-
-            <div class="circle one"></div>
-
-            <div class="circle two"></div>
-
-            <div class="circle three"></div>
-
-            <div id="target"></div>
-
-        </div>
+            <div id="colorBox"></div>
 
 
-        <!-- Message -->
+            <!-- Buttons -->
 
-        <div class="message" id="message">
+            <div class="colors">
 
-            Ready? Let's play! 🎮
+                <button
+                    class="color-btn red"
+                    onclick="checkColor('red')">
 
-        </div>
+                    RED
+
+                </button>
 
 
-        <!-- Button -->
+                <button
+                    class="color-btn blue"
+                    onclick="checkColor('blue')">
 
-        <button
-            class="start-btn"
-            onclick="startGame()">
+                    BLUE
 
-            🚀 Start Game
+                </button>
 
-        </button>
+
+                <button
+                    class="color-btn green"
+                    onclick="checkColor('green')">
+
+                    GREEN
+
+                </button>
+
+
+                <button
+                    class="color-btn yellow"
+                    onclick="checkColor('yellow')">
+
+                    YELLOW
+
+                </button>
+
+            </div>
+
+
+            <div id="message">
+                Press Start Game 🚀
+            </div>
+
+
+            <button
+                class="start-btn"
+                onclick="startGame()">
+
+                ▶ Start Game
+
+            </button>
+
+
+        </section>
 
     </div>
 
+</div>
 
 
-    <script>
 
-        let score = 0;
+<script>
 
-        let time = 30;
+    let score = 0;
+    let time = 30;
+    let level = 1;
+    let lives = 3;
 
-        let level = 1;
+    let correctColor = "";
 
-        let gameRunning = false;
+    let gameRunning = false;
 
-        let timer;
-
-
-        const target =
-            document.getElementById("target");
-
-        const gameArea =
-            document.getElementById("gameArea");
-
-        const scoreText =
-            document.getElementById("score");
-
-        const timeText =
-            document.getElementById("time");
-
-        const levelText =
-            document.getElementById("level");
-
-        const message =
-            document.getElementById("message");
+    let timer;
 
 
-        /* Different colors */
+    const colors = {
 
-        const colors = [
+        red: "#ff1744",
 
-            ["#7c3aed", "#ec4899"],
+        blue: "#2979ff",
 
-            ["#2563eb", "#06b6d4"],
+        green: "#00c853",
 
-            ["#059669", "#84cc16"],
+        yellow: "#fbbf24"
 
-            ["#f97316", "#ef4444"],
-
-            ["#db2777", "#9333ea"],
-
-            ["#0891b2", "#3b82f6"]
-
-        ];
+    };
 
 
-        /* Start Game */
+    /* High Score */
 
-        function startGame() {
+    let highScore =
+        localStorage.getItem("colorHighScore") || 0;
 
-            score = 0;
+    document.getElementById("highScore").innerText =
+        highScore;
 
-            time = 30;
 
-            level = 1;
 
-            gameRunning = true;
+    /* Start Game */
 
-            clearInterval(timer);
+    function startGame() {
+
+        score = 0;
+        time = 30;
+        level = 1;
+        lives = 3;
+
+        gameRunning = true;
+
+        clearInterval(timer);
+
+        document.getElementById("message").innerText =
+            "🔥 Game started!";
+
+        document.querySelector(".start-btn").innerText =
+            "🔄 Restart Game";
+
+        updateScreen();
+
+        newRound();
+
+
+        timer = setInterval(function() {
+
+            time--;
 
             updateScreen();
 
-            target.style.display = "block";
 
-            message.innerText =
-                "🔥 Click the glowing target!";
+            if (time <= 0) {
 
-            moveTarget();
-
-
-            timer = setInterval(() => {
-
-                time--;
-
-                updateScreen();
-
-
-                if (time <= 0) {
-
-                    endGame();
-
-                }
-
-            }, 1000);
-
-        }
-
-
-        /* Move Target */
-
-        function moveTarget() {
-
-            const width =
-                gameArea.clientWidth;
-
-            const height =
-                gameArea.clientHeight;
-
-            const size = 85;
-
-
-            const x =
-                Math.random() *
-                (width - size);
-
-            const y =
-                Math.random() *
-                (height - size);
-
-
-            target.style.left =
-                x + "px";
-
-            target.style.top =
-                y + "px";
-
-
-            /* Random color */
-
-            const random =
-                colors[
-                    Math.floor(
-                        Math.random() *
-                        colors.length
-                    )
-                ];
-
-
-            target.style.background =
-                `linear-gradient(
-                    135deg,
-                    ${random[0]},
-                    ${random[1]}
-                )`;
-
-        }
-
-
-        /* Target Click */
-
-        target.addEventListener(
-            "click",
-            function() {
-
-                if (!gameRunning) {
-                    return;
-                }
-
-
-                score++;
-
-
-                /* Level system */
-
-                if (score >= 10) {
-
-                    level = 2;
-
-                }
-
-                if (score >= 20) {
-
-                    level = 3;
-
-                }
-
-                if (score >= 30) {
-
-                    level = 4;
-
-                }
-
-
-                updateScreen();
-
-
-                message.innerText =
-                    "✨ Nice! Keep going!";
-
-
-                moveTarget();
+                endGame();
 
             }
-        );
+
+        }, 1000);
+
+    }
 
 
-        /* Update Screen */
 
-        function updateScreen() {
+    /* New Round */
 
-            scoreText.innerText =
-                score;
+    function newRound() {
 
-            timeText.innerText =
-                time;
+        const colorNames =
+            Object.keys(colors);
 
-            levelText.innerText =
-                level;
+        const random =
+            Math.floor(
+                Math.random() *
+                colorNames.length
+            );
+
+        correctColor =
+            colorNames[random];
+
+
+        document.getElementById("question").innerText =
+            correctColor.toUpperCase();
+
+
+        document.getElementById("colorBox").style.background =
+            colors[correctColor];
+
+    }
+
+
+
+    /* Check Answer */
+
+    function checkColor(clickedColor) {
+
+        if (!gameRunning) {
+
+            return;
 
         }
 
 
-        /* End Game */
+        if (clickedColor === correctColor) {
 
-        function endGame() {
+            score++;
 
-            clearInterval(timer);
+            document.getElementById("message").innerText =
+                "✨ Correct! Great job!";
 
-            gameRunning = false;
 
-            target.style.display =
-                "none";
+            /* Level */
 
-            message.innerText =
-                "🏆 Game Over! Score: " +
-                score;
+            if (score >= 5) {
+                level = 2;
+            }
+
+            if (score >= 10) {
+                level = 3;
+            }
+
+            if (score >= 15) {
+                level = 4;
+            }
+
+
+            newRound();
 
         }
 
-    </script>
+        else {
+
+            lives--;
+
+            document.getElementById("message").innerText =
+                "❌ Wrong! Try again.";
+
+            if (lives <= 0) {
+
+                endGame();
+
+                return;
+
+            }
+
+        }
+
+
+        updateScreen();
+
+    }
+
+
+
+    /* Update Screen */
+
+    function updateScreen() {
+
+        document.getElementById("score").innerText =
+            score;
+
+        document.getElementById("time").innerText =
+            time;
+
+        document.getElementById("level").innerText =
+            level;
+
+
+        let hearts = "";
+
+        for (let i = 0; i < lives; i++) {
+
+            hearts += "❤️";
+
+        }
+
+        document.getElementById("lives").innerText =
+            hearts;
+
+
+        document.getElementById("highScore").innerText =
+            highScore;
+
+    }
+
+
+
+    /* End Game */
+
+    function endGame() {
+
+        clearInterval(timer);
+
+        gameRunning = false;
+
+
+        if (score > highScore) {
+
+            highScore = score;
+
+            localStorage.setItem(
+                "colorHighScore",
+                highScore
+            );
+
+        }
+
+
+        updateScreen();
+
+
+        document.getElementById("question").innerText =
+            "GAME OVER";
+
+
+        document.getElementById("message").innerText =
+            "🏆 Your Score: " + score;
+
+    }
+
+</script>
 
 </body>
 </html>

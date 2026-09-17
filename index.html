@@ -445,3 +445,410 @@
 </body>
 
 </html> --> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Color Blast Game</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6a11cb, #2575fc, #00c9a7);
+            background-size: 300% 300%;
+            animation: bgMove 8s infinite alternate;
+        }
+
+        @keyframes bgMove {
+            0% {
+                background-position: left;
+            }
+
+            100% {
+                background-position: right;
+            }
+        }
+
+        .game-container {
+            width: 90%;
+            max-width: 850px;
+            padding: 25px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 40px;
+            margin-bottom: 10px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .box span {
+            display: block;
+            font-size: 25px;
+            margin-top: 5px;
+        }
+
+        #gameArea {
+            position: relative;
+            height: 430px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.25),
+                rgba(255, 255, 255, 0.08)
+            );
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        #target {
+            position: absolute;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+
+            background: linear-gradient(135deg, #ff0080, #ff8c00);
+            box-shadow:
+                0 0 10px #fff,
+                0 0 25px #ff0080,
+                0 0 45px #ff8c00;
+
+            animation: pulse 0.8s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.15);
+            }
+        }
+
+        .hit {
+            animation: hit 0.25s;
+        }
+
+        @keyframes hit {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.5);
+            }
+
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        #message {
+            color: white;
+            font-size: 22px;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        button {
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(135deg, #ff0080, #ff8c00);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .combo {
+            color: #ffe600;
+            font-size: 20px;
+            margin-top: 10px;
+            min-height: 25px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 30px;
+            }
+
+            #gameArea {
+                height: 350px;
+            }
+
+            .score-board {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container">
+
+        <h1>🎯 Color Blast</h1>
+
+        <p class="subtitle">
+            Click the target as fast as you can! ⚡
+        </p>
+
+        <div class="score-board">
+
+            <div class="box">
+                SCORE
+                <span id="score">0</span>
+            </div>
+
+            <div class="box">
+                TIME
+                <span id="time">30</span>
+            </div>
+
+            <div class="box">
+                LEVEL
+                <span id="level">1</span>
+            </div>
+
+            <div class="box">
+                ❤️ LIVES
+                <span id="lives">3</span>
+            </div>
+
+        </div>
+
+        <div id="gameArea">
+            <div id="target"></div>
+        </div>
+
+        <div id="message">
+            Press Start Game to begin 🚀
+        </div>
+
+        <div class="combo" id="combo"></div>
+
+        <button onclick="startGame()">
+            🚀 Start Game
+        </button>
+
+    </div>
+
+
+    <script>
+
+        let score = 0;
+        let time = 30;
+        let lives = 3;
+        let level = 1;
+        let combo = 0;
+
+        let timer;
+        let gameRunning = false;
+
+        const target = document.getElementById("target");
+        const gameArea = document.getElementById("gameArea");
+
+        const scoreText = document.getElementById("score");
+        const timeText = document.getElementById("time");
+        const livesText = document.getElementById("lives");
+        const levelText = document.getElementById("level");
+        const message = document.getElementById("message");
+        const comboText = document.getElementById("combo");
+
+
+        function startGame() {
+
+            clearInterval(timer);
+
+            score = 0;
+            time = 30;
+            lives = 3;
+            level = 1;
+            combo = 0;
+
+            gameRunning = true;
+
+            updateScreen();
+
+            message.innerText = "🔥 Game Started! Click the target!";
+            comboText.innerText = "";
+
+            target.style.display = "block";
+
+            moveTarget();
+
+            timer = setInterval(function () {
+
+                time--;
+
+                updateScreen();
+
+                if (time <= 0) {
+                    endGame();
+                }
+
+            }, 1000);
+        }
+
+
+        target.addEventListener("click", function () {
+
+            if (!gameRunning) {
+                return;
+            }
+
+            score++;
+            combo++;
+
+            // Every 5 clicks = bonus
+            if (combo % 5 === 0) {
+
+                score += 2;
+
+                comboText.innerText =
+                    "🔥 COMBO x" + combo + " +2 BONUS!";
+            }
+
+            // Level up
+            if (score >= 10 && level === 1) {
+                level = 2;
+                message.innerText = "⚡ LEVEL 2!";
+            }
+
+            if (score >= 25 && level === 2) {
+                level = 3;
+                message.innerText = "🚀 LEVEL 3!";
+            }
+
+            if (score >= 45 && level === 3) {
+                level = 4;
+                message.innerText = "🔥 LEVEL 4!";
+            }
+
+            updateScreen();
+
+            moveTarget();
+
+        });
+
+
+        function moveTarget() {
+
+            const areaWidth = gameArea.clientWidth;
+            const areaHeight = gameArea.clientHeight;
+
+            const targetSize = 65;
+
+            const randomX =
+                Math.random() * (areaWidth - targetSize);
+
+            const randomY =
+                Math.random() * (areaHeight - targetSize);
+
+            target.style.left = randomX + "px";
+            target.style.top = randomY + "px";
+
+            // Random target color
+            const colors = [
+                ["#ff0080", "#ff8c00"],
+                ["#00f2fe", "#4facfe"],
+                ["#7f00ff", "#e100ff"],
+                ["#00c853", "#b2ff59"],
+                ["#ff1744", "#ff9100"],
+                ["#00bcd4", "#3f51b5"]
+            ];
+
+            const randomColor =
+                colors[Math.floor(Math.random() * colors.length)];
+
+            target.style.background =
+                "linear-gradient(135deg, "
+                + randomColor[0] + ", "
+                + randomColor[1] + ")";
+
+            target.style.boxShadow =
+                "0 0 15px white, 0 0 30px "
+                + randomColor[0];
+        }
+
+
+        function updateScreen() {
+
+            scoreText.innerText = score;
+            timeText.innerText = time;
+            livesText.innerText = lives;
+            levelText.innerText = level;
+
+        }
+
+
+        function endGame() {
+
+            clearInterval(timer);
+
+            gameRunning = false;
+
+            target.style.display = "none";
+
+            message.innerText =
+                "🏆 Game Over! Your Score: " + score;
+
+            comboText.innerText =
+                "🎉 Great job! Try again and beat your score!";
+        }
+
+    </script>
+
+</body>
+</html>

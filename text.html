@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Student Learning Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        /* Header */
+        header {
+            background: #1d4ed8;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        #themeBtn {
+            background: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Main */
+        main {
+            width: 85%;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px #ddd;
+        }
+
+        .welcome h2 {
+            margin-bottom: 10px;
+        }
+
+        /* Progress */
+        .progress-box {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress {
+            width: 65%;
+            height: 100%;
+            background: #22c55e;
+        }
+
+        /* Courses */
+        .courses {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .course-card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px #ddd;
+            transition: 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .learn-btn {
+            background: #1d4ed8;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .learn-btn:hover {
+            background: #163ca5;
+        }
+
+        /* Quiz */
+        .quiz {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px #ddd;
+        }
+
+        .quiz h2 {
+            margin-bottom: 15px;
+        }
+
+        .quiz button {
+            margin: 8px 5px 0 0;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        /* Dark Mode */
+        .dark {
+            background: #111827;
+            color: white;
+        }
+
+        .dark .welcome,
+        .dark .course-card,
+        .dark .quiz {
+            background: #1f2937;
+            color: white;
+        }
+
+        .dark .course-card p {
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+
+        <h1>🎓 SmartLearn</h1>
+
+        <button id="themeBtn" onclick="changeTheme()">
+            🌙 Dark Mode
+        </button>
+
+    </header>
+
+
+    <main>
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+
+            <h2>Welcome Back 👋</h2>
+
+            <p>Continue your learning journey and improve your skills every day.</p>
+
+            <div class="progress-box">
+
+                <strong>Overall Progress: 65%</strong>
+
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Courses -->
+        <h2>📚 My Courses</h2>
+
+        <section class="courses">
+
+            <div class="course-card">
+
+                <div class="course-icon">☕</div>
+
+                <h3>Java Programming</h3>
+
+                <p>Learn Java basics, OOP, arrays and collections.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('Java Programming')">
+                    Start Learning
+                </button>
+
+            </div>
+
+
+            <div class="course-card">
+
+                <div class="course-icon">🐍</div>
+
+                <h3>Python</h3>
+
+                <p>Learn Python programming with simple projects.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('Python')">
+                    Start Learning
+                </button>
+
+            </div>
+
+
+            <div class="course-card">
+
+                <div class="course-icon">🌐</div>
+
+                <h3>Web Development</h3>
+
+                <p>Learn HTML, CSS and JavaScript from basics.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('Web Development')">
+                    Start Learning
+                </button>
+
+            </div>
+
+
+            <div class="course-card">
+
+                <div class="course-icon">🗄️</div>
+
+                <h3>SQL & Database</h3>
+
+                <p>Learn queries, joins, functions and databases.</p>
+
+                <button class="learn-btn"
+                    onclick="startCourse('SQL & Database')">
+                    Start Learning
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Quiz -->
+        <section class="quiz">
+
+            <h2>🧠 Quick Quiz</h2>
+
+            <p>Which language is mainly used for web page structure?</p>
+
+            <button onclick="checkAnswer('HTML')">
+                HTML
+            </button>
+
+            <button onclick="checkAnswer('CSS')">
+                CSS
+            </button>
+
+            <button onclick="checkAnswer('Java')">
+                Java
+            </button>
+
+            <p id="result"></p>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        // Start Course
+        function startCourse(courseName) {
+
+            alert("You selected: " + courseName);
+
+        }
+
+
+        // Quiz
+        function checkAnswer(answer) {
+
+            let result = document.getElementById("result");
+
+            if (answer === "HTML") {
+
+                result.innerHTML = "✅ Correct! HTML is used for web page structure.";
+                result.style.color = "green";
+
+            } else {
+
+                result.innerHTML = "❌ Try again!";
+
+                result.style.color = "red";
+
+            }
+
+        }
+
+
+        // Dark Mode
+        function changeTheme() {
+
+            document.body.classList.toggle("dark");
+
+            let button = document.getElementById("themeBtn");
+
+            if (document.body.classList.contains("dark")) {
+
+                button.innerHTML = "☀️ Light Mode";
+
+            } else {
+
+                button.innerHTML = "🌙 Dark Mode";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

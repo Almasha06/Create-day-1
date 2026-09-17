@@ -453,233 +453,243 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Color Blast Game</title>
+    <title>Color Match Game</title>
 
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: Arial, sans-serif;
             min-height: 100vh;
+
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #6a11cb, #2575fc, #00c9a7);
-            background-size: 300% 300%;
-            animation: bgMove 8s infinite alternate;
+
+            background: linear-gradient(
+                135deg,
+                #ff6a00,
+                #ee0979,
+                #7f00ff
+            );
         }
 
-        @keyframes bgMove {
-            0% {
-                background-position: left;
-            }
-
-            100% {
-                background-position: right;
-            }
-        }
-
-        .game-container {
+        .game {
             width: 90%;
-            max-width: 850px;
-            padding: 25px;
+            max-width: 600px;
+
+            background: white;
+            padding: 30px;
+
             border-radius: 25px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+
             text-align: center;
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
-            color: white;
-            font-size: 40px;
+            font-size: 38px;
             margin-bottom: 10px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: #7f00ff;
         }
 
-        .subtitle {
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .score-board {
+        .info {
             display: flex;
             justify-content: space-around;
-            gap: 10px;
-            margin-bottom: 20px;
+
+            margin: 25px 0;
         }
 
-        .box {
-            flex: 1;
-            padding: 15px;
+        .info-box {
+            padding: 12px 20px;
+
             border-radius: 15px;
-            color: white;
+
+            background: #f1f1f1;
+
             font-weight: bold;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .box span {
+        .info-box span {
             display: block;
+
             font-size: 25px;
+
             margin-top: 5px;
         }
 
-        #gameArea {
-            position: relative;
-            height: 430px;
-            border-radius: 20px;
-            overflow: hidden;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.25),
-                rgba(255, 255, 255, 0.08)
-            );
-            border: 2px solid rgba(255, 255, 255, 0.4);
+        #question {
+            font-size: 24px;
+            font-weight: bold;
+
+            margin: 20px 0;
         }
 
-        #target {
-            position: absolute;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: none;
+        #colorBox {
+            width: 180px;
+            height: 180px;
 
-            background: linear-gradient(135deg, #ff0080, #ff8c00);
+            margin: 20px auto;
+
+            border-radius: 25px;
+
             box-shadow:
-                0 0 10px #fff,
-                0 0 25px #ff0080,
-                0 0 45px #ff8c00;
-
-            animation: pulse 0.8s infinite alternate;
+                0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
-        @keyframes pulse {
-            from {
-                transform: scale(1);
-            }
+        .colors {
+            display: grid;
 
-            to {
-                transform: scale(1.15);
-            }
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 15px;
+
+            margin-top: 25px;
         }
 
-        .hit {
-            animation: hit 0.25s;
+        .color-btn {
+            height: 70px;
+
+            border: none;
+
+            border-radius: 15px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            color: white;
         }
 
-        @keyframes hit {
-            0% {
-                transform: scale(1);
-            }
+        .color-btn:hover {
+            transform: scale(1.05);
+        }
 
-            50% {
-                transform: scale(1.5);
-            }
+        #red {
+            background: #ff1744;
+        }
 
-            100% {
-                transform: scale(0);
-            }
+        #blue {
+            background: #2979ff;
+        }
+
+        #green {
+            background: #00c853;
+        }
+
+        #yellow {
+            background: #ffca28;
+            color: black;
         }
 
         #message {
-            color: white;
-            font-size: 22px;
-            margin: 15px;
-            font-weight: bold;
-        }
+            min-height: 30px;
 
-        button {
-            border: none;
-            padding: 14px 30px;
-            border-radius: 30px;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-            background: linear-gradient(135deg, #ff0080, #ff8c00);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-            transition: 0.3s;
-        }
+            margin: 20px;
 
-        button:hover {
-            transform: translateY(-3px) scale(1.05);
-        }
-
-        .combo {
-            color: #ffe600;
             font-size: 20px;
-            margin-top: 10px;
-            min-height: 25px;
+
+            font-weight: bold;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 30px;
-            }
+        #startBtn {
+            padding: 14px 30px;
 
-            #gameArea {
-                height: 350px;
-            }
+            border: none;
 
-            .score-board {
-                flex-wrap: wrap;
-            }
+            border-radius: 30px;
+
+            background: linear-gradient(
+                135deg,
+                #7f00ff,
+                #ee0979
+            );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        #startBtn:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="game-container">
+    <div class="game">
 
-        <h1>🎯 Color Blast</h1>
+        <h1>🌈 Color Match</h1>
 
-        <p class="subtitle">
-            Click the target as fast as you can! ⚡
-        </p>
+        <p>Choose the correct color!</p>
 
-        <div class="score-board">
+        <div class="info">
 
-            <div class="box">
+            <div class="info-box">
                 SCORE
                 <span id="score">0</span>
             </div>
 
-            <div class="box">
+            <div class="info-box">
                 TIME
                 <span id="time">30</span>
             </div>
 
-            <div class="box">
+            <div class="info-box">
                 LEVEL
                 <span id="level">1</span>
             </div>
 
-            <div class="box">
-                ❤️ LIVES
-                <span id="lives">3</span>
-            </div>
+        </div>
+
+        <div id="question">
+            Press Start Game 🎮
+        </div>
+
+        <div id="colorBox"></div>
+
+        <div class="colors">
+
+            <button class="color-btn" id="red"
+                onclick="checkColor('red')">
+                RED
+            </button>
+
+            <button class="color-btn" id="blue"
+                onclick="checkColor('blue')">
+                BLUE
+            </button>
+
+            <button class="color-btn" id="green"
+                onclick="checkColor('green')">
+                GREEN
+            </button>
+
+            <button class="color-btn" id="yellow"
+                onclick="checkColor('yellow')">
+                YELLOW
+            </button>
 
         </div>
 
-        <div id="gameArea">
-            <div id="target"></div>
-        </div>
+        <div id="message"></div>
 
-        <div id="message">
-            Press Start Game to begin 🚀
-        </div>
-
-        <div class="combo" id="combo"></div>
-
-        <button onclick="startGame()">
-            🚀 Start Game
+        <button id="startBtn" onclick="startGame()">
+            🎮 Start Game
         </button>
 
     </div>
@@ -689,163 +699,153 @@
 
         let score = 0;
         let time = 30;
-        let lives = 3;
         let level = 1;
-        let combo = 0;
+
+        let gameStarted = false;
 
         let timer;
-        let gameRunning = false;
 
-        const target = document.getElementById("target");
-        const gameArea = document.getElementById("gameArea");
+        const colors = [
+            {
+                name: "red",
+                code: "#ff1744"
+            },
 
-        const scoreText = document.getElementById("score");
-        const timeText = document.getElementById("time");
-        const livesText = document.getElementById("lives");
-        const levelText = document.getElementById("level");
-        const message = document.getElementById("message");
-        const comboText = document.getElementById("combo");
+            {
+                name: "blue",
+                code: "#2979ff"
+            },
+
+            {
+                name: "green",
+                code: "#00c853"
+            },
+
+            {
+                name: "yellow",
+                code: "#ffca28"
+            }
+        ];
 
 
         function startGame() {
 
+            score = 0;
+
+            time = 30;
+
+            level = 1;
+
+            gameStarted = true;
+
+            document.getElementById("message").innerText =
+                "🔥 Game Started!";
+
+            document.getElementById("startBtn").innerText =
+                "🔄 Restart Game";
+
+            updateScore();
+
+            newColor();
+
             clearInterval(timer);
 
-            score = 0;
-            time = 30;
-            lives = 3;
-            level = 1;
-            combo = 0;
-
-            gameRunning = true;
-
-            updateScreen();
-
-            message.innerText = "🔥 Game Started! Click the target!";
-            comboText.innerText = "";
-
-            target.style.display = "block";
-
-            moveTarget();
-
-            timer = setInterval(function () {
+            timer = setInterval(function() {
 
                 time--;
 
-                updateScreen();
+                document.getElementById("time").innerText = time;
 
                 if (time <= 0) {
-                    endGame();
+
+                    clearInterval(timer);
+
+                    gameStarted = false;
+
+                    document.getElementById("question").innerText =
+                        "🏆 Game Over!";
+
+                    document.getElementById("message").innerText =
+                        "Your final score is " + score;
+
                 }
 
             }, 1000);
         }
 
 
-        target.addEventListener("click", function () {
+        function newColor() {
 
-            if (!gameRunning) {
+            let random =
+                Math.floor(Math.random() * colors.length);
+
+            let selectedColor = colors[random];
+
+            document.getElementById("colorBox").style.background =
+                selectedColor.code;
+
+            document.getElementById("question").innerText =
+                "Find: " + selectedColor.name.toUpperCase();
+
+            document.getElementById("colorBox").dataset.color =
+                selectedColor.name;
+        }
+
+
+        function checkColor(clickedColor) {
+
+            if (!gameStarted) {
                 return;
             }
 
-            score++;
-            combo++;
+            let correctColor =
+                document.getElementById("colorBox").dataset.color;
 
-            // Every 5 clicks = bonus
-            if (combo % 5 === 0) {
 
-                score += 2;
+            if (clickedColor === correctColor) {
 
-                comboText.innerText =
-                    "🔥 COMBO x" + combo + " +2 BONUS!";
+                score++;
+
+                document.getElementById("message").innerText =
+                    "🎉 Correct! +1";
+
+                if (score >= 5) {
+                    level = 2;
+                }
+
+                if (score >= 10) {
+                    level = 3;
+                }
+
+                if (score >= 15) {
+                    level = 4;
+                }
+
+                updateScore();
+
+                newColor();
+
+            } else {
+
+                document.getElementById("message").innerText =
+                    "❌ Wrong! Try again.";
+
             }
-
-            // Level up
-            if (score >= 10 && level === 1) {
-                level = 2;
-                message.innerText = "⚡ LEVEL 2!";
-            }
-
-            if (score >= 25 && level === 2) {
-                level = 3;
-                message.innerText = "🚀 LEVEL 3!";
-            }
-
-            if (score >= 45 && level === 3) {
-                level = 4;
-                message.innerText = "🔥 LEVEL 4!";
-            }
-
-            updateScreen();
-
-            moveTarget();
-
-        });
-
-
-        function moveTarget() {
-
-            const areaWidth = gameArea.clientWidth;
-            const areaHeight = gameArea.clientHeight;
-
-            const targetSize = 65;
-
-            const randomX =
-                Math.random() * (areaWidth - targetSize);
-
-            const randomY =
-                Math.random() * (areaHeight - targetSize);
-
-            target.style.left = randomX + "px";
-            target.style.top = randomY + "px";
-
-            // Random target color
-            const colors = [
-                ["#ff0080", "#ff8c00"],
-                ["#00f2fe", "#4facfe"],
-                ["#7f00ff", "#e100ff"],
-                ["#00c853", "#b2ff59"],
-                ["#ff1744", "#ff9100"],
-                ["#00bcd4", "#3f51b5"]
-            ];
-
-            const randomColor =
-                colors[Math.floor(Math.random() * colors.length)];
-
-            target.style.background =
-                "linear-gradient(135deg, "
-                + randomColor[0] + ", "
-                + randomColor[1] + ")";
-
-            target.style.boxShadow =
-                "0 0 15px white, 0 0 30px "
-                + randomColor[0];
-        }
-
-
-        function updateScreen() {
-
-            scoreText.innerText = score;
-            timeText.innerText = time;
-            livesText.innerText = lives;
-            levelText.innerText = level;
 
         }
 
 
-        function endGame() {
+        function updateScore() {
 
-            clearInterval(timer);
+            document.getElementById("score").innerText =
+                score;
 
-            gameRunning = false;
+            document.getElementById("level").innerText =
+                level;
 
-            target.style.display = "none";
+            document.getElementById("time").innerText =
+                time;
 
-            message.innerText =
-                "🏆 Game Over! Your Score: " + score;
-
-            comboText.innerText =
-                "🎉 Great job! Try again and beat your score!";
         }
 
     </script>
